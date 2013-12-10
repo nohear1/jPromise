@@ -1,5 +1,7 @@
 var p = require('../promise.js');
 
+console.log("P", p);
+
 module.exports = function () {
 
 	return {

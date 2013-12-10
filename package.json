@@ -3,5 +3,8 @@
 		"mocha": "*",
 		"promises-aplus-tests": "*",
 		"sinon": "*"
-	}
+	},
+	"name": "jpromise",
+	"version": "1.0.0",
+	"main": "./promise"
 }
