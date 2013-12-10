@@ -1,0 +1,7 @@
+{
+	"devDependencies": {
+		"mocha": "*",
+		"promises-aplus-tests": "*",
+		"sinon": "*"
+	}
+}
