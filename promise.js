@@ -217,7 +217,7 @@
 	 * @param {boolean} [debugMode] - Enables debug mode for exposing internal properties
 	 * @returns {deferred} the deferred instance object
 	**/
-	var p = function(beforeStart, debugMode) {
+	var p = function(beforeStart) {
 		//setup some instance parameters
 		//internalState 0 == pending, 1 == resolved, 2 == rejected
 		this.internalState = 0;
@@ -234,28 +234,6 @@
 		//if beforeStart is passed then call it with this being the deferred
 		if(beforeStart && isFunction(beforeStart)) {
 			beforeStart.call(this, this);
-		}
-
-		if(!debugMode) {
-			if(Object.defineProperties) {
-				Object.defineProperties(this, {
-					"internalState": {enumerable:false, writable:true, configurable:false},
-					"internalWith": {enumerable:false, writable:true, configurable:false},
-					"internalData": {enumerable:false, writable:true, configurable:false},
-					"callbacks": {enumerable:false, writable:false, configurable:false},
-					"_pro": {enumerable:false, writable:true, configurable:false}
-				});
-			}
-
-			if(Object.seal) {
-				//Freeze the this so that the functions cannot be changed/overridden nor modified
-				Object.seal(this);
-			}
-			
-			if(Object.freeze) {
-				//Freeze the prototype so that the functions cannot be changed/overridden nor modified
-				Object.freeze(p.prototype);
-			}
 		}
 
 		return this;
@@ -697,6 +675,10 @@
 			return this.internalState;
 		}
 	});
+
+	if(Object.freeze) {
+		Object.freeze(p.prototype);
+	}
 
 	p.when = p.prototype.when;
 	p.wrap = p.prototype.wrap;

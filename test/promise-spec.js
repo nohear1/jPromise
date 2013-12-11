@@ -36,7 +36,6 @@ describe("Promise.js Deferred Promise class", function() {
 		it("has an internalState property that you could read manually if you wanted... setting would bork things", function() {
 			var dfd = new p();
 			assert.equal(dfd.internalState, 0, "internalState should equal 0 when pending");
-			assert.equal(Object.keys(dfd).length, 0, "Object.keys should equal 0 since the props are non enumerable");
 
 			dfd.reject();
 			assert.equal(dfd.internalState, 2, "internalState should equal 2 when rejected");
