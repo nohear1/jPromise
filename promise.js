@@ -54,6 +54,12 @@
 		return false;
 	};
 
+	var setTimeout = root.setTimeout;
+
+	if(process && isFunction(process.nextTick)) {
+		setTimeout = process.nextTick;
+	}
+
 	/**
 	 * callback receives a scope and data as well as a list of callbacks to execute
 	 * 		it proceeds to call all of those callbacks with the scope and data provided
