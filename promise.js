@@ -119,17 +119,15 @@
 	}
 
 	function doIsPromiseSteal(data, scope) {
-		data.then(function(resData) {
+		data.done(function(resData) {
 			scope.doResolve(resData);
-		}, function(rejData) {
+		});
+		data.fail(function(rejData) {
 			scope.doReject(rejData);
 		});
-		
-		if(isFunction(data.progress)) {
-			data.progress(function(progData) {
-				scope.doNotify(progData);
-			});
-		}
+		data.progress(function(progData) {
+			scope.doNotify(progData);
+		});
 	};
 
 	function doWhatYouShould(data, what, scope) {
