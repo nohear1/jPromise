@@ -1,7 +1,7 @@
 {
 	"name": "jpromise",
 	"version": "1.0.0",
-	"main": "./promise",
+	"main": "./jpromise",
 
 	"Why the balls are we depending on q in our devDeps?": "to ensure we're faster than them",
 	"devDependencies": {
