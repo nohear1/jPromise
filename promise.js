@@ -142,7 +142,8 @@
 		var ret = {
 			failed: false,
 			datasThen: undefined
-		}
+		};
+
 		try {
 			ret.datasThen = data.then;
 		} catch(e) {
@@ -150,6 +151,7 @@
 			ret.failed = true;
 			scope.doReject(e);
 		}
+
 		return ret;
 	};
 
@@ -192,9 +194,7 @@
 
 		if(!ret.failed) {
 			if(isFunction(ret.datasThen)) {
-				
 				doDatasThenIsAFunction(ret.datasThen, data, scope);
-
 			} else {
 				doWhatYouShould(data, what, scope);
 			}
@@ -527,21 +527,13 @@
 			var that = this;
 
 			if(data === this.promise()) {
-
 				that.doReject(new TypeError("Promise Tried to Resolve with Self"));
-
 			} else if(isPromise(data)) {
-
 				doIsPromiseSteal(data, that);
-
 			} else if(isObject(data) || isFunction(data)) {
-
 				doStealDatasThen(data, what, that);
-
 			} else {
-				
 				doWhatYouShould(data, what, that);
-
 			}
 		},
 
@@ -563,7 +555,6 @@
 
 		then: function(doneFilter, failFilter, progressFilter) {
 			var newp = new p();
-			var that = this;
 
 			this.done(
 				getThenFilterCallback(doneFilter, newp, "resolve")
@@ -571,26 +562,28 @@
 				getThenFilterCallback(failFilter, newp, "reject")
 			).progress(
 				getThenFilterCallback(progressFilter, newp, "notify")
-			)
+			);
 
 			return newp.promise();
 		},
 
+		/**
+		 * Wrap takes a thenable and returns a jPromise.
+		 *
+		 * @thenable A thenable object (an object/function that has a then function on it)
+		 *
+		 * @return promisified then
+		**/
 		wrap: function(thennable) {
 			var newp = new p();
+
 			var datasThen;
 			if(isPromise(thennable) || isDeferred(thennable)) {
-				
 				doIsPromiseSteal(thennable, newp);
-
 			} else if (isObject(thennable) || isFunction(thennable)) {
-				
 				doStealDatasThen(thennable, "resolve", newp);
-
 			} else {
-				
 				newp.resolve(thennable);
-
 			}
 
 			return newp.promise();
@@ -629,29 +622,35 @@
 						resolvedCount++; handledCount++;
 						whenData[i] = data;
 						newp.notify({
-							index: i, action: "resolved", data: data, resolved: resolvedCount, handled: handeldCount
+							index: i, action: "resolved", data: data, resolved: resolvedCount, handled: handledCount
 						});
+
 						if(resolvedCount === promises.length) {
 							newp.resolve(whenData);
+						} else if (handledCount === promises.length) {
+							newp.reject(whenData);
 						}
 					}).fail(function(data) {
 						handledCount++;
 						whenData[i] = data;
 						newp.notify({
-							index: i, action: "rejected", data: data, resolved: resolvedCount, handled: handeldCount
+							index: i, action: "rejected", data: data, resolved: resolvedCount, handled: handledCount
 						});
-						if(handledCount === promises.length) {
+
+						if(resolvedCount === promises.length) {
+							newp.resolve(whenData);
+						} else if (handledCount === promises.length) {
 							newp.reject(whenData);
 						}
 					}).progress(function(data) {
 						newp.notify(data);
 					});
-				} else if (promise) {
+				} else if (!!promise) {
 					resolvedCount++; handledCount++;
 					whenData[i] = promise;
 				} else {
 					handledCount++;
-					whenData[i] = promises;
+					whenData[i] = promise;
 				}
 			});
 
@@ -678,6 +677,9 @@
 		**/
 		promise: function(target) {
 			if(!this._pro) {
+				// Create this here since the creator of the deferred object doesn't always
+				// ask for a promise. This gives a slight performance benefit if the creator
+				// keeps it close to chest.
 				this._pro = new this.Promise(this, target);
 			}
 			return this._pro;

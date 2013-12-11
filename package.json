@@ -1,10 +1,13 @@
 {
+	"name": "jpromise",
+	"version": "1.0.0",
+	"main": "./promise",
+
+	"Why the balls are we depending on q in our devDeps?": "to ensure we're faster than them",
 	"devDependencies": {
 		"mocha": "*",
 		"promises-aplus-tests": "*",
-		"sinon": "*"
-	},
-	"name": "jpromise",
-	"version": "1.0.0",
-	"main": "./promise"
+		"sinon": "*",
+		"q": "*"
+	}
 }

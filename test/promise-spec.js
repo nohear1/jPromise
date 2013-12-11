@@ -7,14 +7,10 @@ function isFunction(a) {
 	return !!(a && Object.prototype.toString.call(a) === '[object Function]');
 };
 
-describe("Passes the incredibly complicated to read Promises/A+ Tests latest version :D", function () {
-	require("promises-aplus-tests").mocha(adapter);
-});
-
 describe("Promise.js Deferred Promise class", function() {
 	it("sets up a global constructor p", function() {
-		expect(p).not.toEqual(undefined);
-		expect(p).toBeTruthy();
+		assert.notEqual(p, undefined);
+		assert(p);
 	});
 
 	describe("returns a deferred constructor that can be newed up", function() {
@@ -47,7 +43,7 @@ describe("Promise.js Deferred Promise class", function() {
 			
 			dfd = new p();
 			dfd.resolve();
-			assert.equal(dfd.internalState, 0, "internalState should equal 1 when resolved");
+			assert.equal(dfd.internalState, 1, "internalState should equal 1 when resolved");
 			
 		});
 
@@ -312,7 +308,7 @@ describe("Promise.js Deferred Promise class", function() {
 			dfd.notify();
 		});
 
-		it("notifyWith calls progress callbacks and the callback is scoped to the first param of resolveWith", function() {
+		it("notifyWith calls progress callbacks and the callback is scoped to the first param of resolveWith", function(done) {
 			var dfd = new p();
 			var promise = dfd.promise();
 
@@ -352,7 +348,7 @@ describe("Promise.js Deferred Promise class", function() {
 			}, 10);
 		});
 
-		it("calling resolve after calling reject does nothing and it stays 'rejected'", function() {
+		it("calling resolve after calling reject does nothing and it stays 'rejected'", function(done) {
 			var dfd = new p();
 			var promise = dfd.promise();
 
@@ -483,7 +479,7 @@ describe("Promise.js Deferred Promise class", function() {
 			var pro1 = dfd1.promise();
 			var pro2 = dfd2.promise();
 
-			var newPro = dfd1.when([true, pro1, pro2]);
+			var newPro = p.when([true, pro1, pro2]);
 
 			dfd1.resolve();
 
@@ -517,7 +513,7 @@ describe("Promise.js Deferred Promise class", function() {
 			var pro1 = dfd1.promise();
 			var pro2 = dfd2.promise();
 
-			var newPro = dfd1.when([false, pro1, pro2]);
+			var newPro = p.when([false, pro1, pro2]);
 
 			dfd1.resolve();
 
@@ -529,7 +525,6 @@ describe("Promise.js Deferred Promise class", function() {
 			var count = 0;
 			newPro.fail(function() {
 				count++;
-
 				assert.equal(count, 1);
 			});
 
@@ -611,4 +606,8 @@ describe("Promise.js Deferred Promise class", function() {
 			});
 		});
 	});
+});
+
+describe("Passes the incredibly complicated to read Promises/A+ Tests latest version :D", function () {
+	require("promises-aplus-tests").mocha(adapter);
 });
