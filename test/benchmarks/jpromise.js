@@ -1,4 +1,4 @@
-var p = require('../../promise.js');
+var p = require('../../jpromise.js');
 var adapter = require("../adapter.js");
 
 module.exports = function () {
@@ -44,7 +44,7 @@ module.exports = function () {
 		i++;
 	} while ( i < 10000 );
 
-	p.when(dfd1.promise, dfd2.promise).then(function() {
+	p.when(dfd1.promise, dfd2.promise).done(function() {
 		ret.ops = (ret.resolvedOps + ret.rejectedOps) / 2;
 		deferred.resolve(ret);
 	}, undefined);

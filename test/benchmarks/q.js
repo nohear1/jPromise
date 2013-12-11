@@ -1,3 +1,4 @@
+var p = require("../../jpromise.js");
 var Q = require("q");
 var adapter = require("./qAdapter.js");
 
@@ -6,7 +7,7 @@ module.exports = function () {
 	var i = 0;
 	var resCounter = 1;
 	var rejCounter = 1;
-	var deferred = adapter.deferred();
+	var deferred = new p();
 	var dfd1 = adapter.deferred();
 	var dfd2 = adapter.deferred();
 	var start, stop;
@@ -44,10 +45,10 @@ module.exports = function () {
 		i++;
 	} while ( i < 10000 );
 
-	Q.all(dfd1.promise, dfd2.promise).done(function() {
+	Q.all(dfd1.promise, dfd2.promise).then(function() {
 		ret.ops = (ret.resolvedOps + ret.rejectedOps) / 2;
 		deferred.resolve(ret);
 	});
 	
-	return deferred.promise; 
+	return deferred.promise(); 
 };

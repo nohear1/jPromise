@@ -1,4 +1,4 @@
-var p = require('../promise.js');
+var p = require('../jpromise.js');
 
 module.exports = function () {
 
