@@ -1,10 +1,8 @@
-
-
 /**
  * Promise.js returns a Deferred object which supports the jQuery deferred api but without
- * 		the requirement on jQuery.  Its also more performant than jQuery deferred and when JS, 
- *   	a bit less performant than vow.js but it does the difference between the deferred object and the 
- *    promise object better, (whereas vow does not).
+ *        the requirement on jQuery.  Its also more performant than jQuery deferred and when JS, 
+ *        a bit less performant than vow.js but it does the difference between the deferred object and the 
+ *        promise object better, (whereas vow does not).
  * @closure returns a Deferred @constructor
  * @notes Read this if you don't understand public/private/privilege in JS
  *        http://javascript.crockford.com/private.html
@@ -26,33 +24,33 @@
 		for(var key in b) {
 			a[key] = b[key];
 		}
-	};
+	}
 
 	function isFunction(a) {
 		return !!(a && Object.prototype.toString.call(a) === '[object Function]');
-	};
+	}
 
 	function isObject(a) {
 		return !!(a && Object.prototype.toString.call(a) === '[object Object]');
-	};
+	}
 
 	function isArray(a) {
 		return !!(a && Object.prototype.toString.call(a) === '[object Array]');
-	};
+	}
 
 	function isPromise(promise) {
 		if(typeof promise !== "undefined" && promise !== null && promise.toString && promise.toString() === "[object Promise]") {
 			return true;
 		}
 		return false;
-	};
+	}
 
 	function isDeferred(deferred) {
 		if(typeof deferred !== "undefined" && deferred !== null && deferred.toString && deferred.toString() === "[object Deferred]") {
 			return true;
 		}
 		return false;
-	};
+	}
 
 	var setTimeout = root.setTimeout;
 
@@ -62,7 +60,7 @@
 
 	/**
 	 * callback receives a scope and data as well as a list of callbacks to execute
-	 * 		it proceeds to call all of those callbacks with the scope and data provided
+	 *         it proceeds to call all of those callbacks with the scope and data provided
 	 * @function
 	 * @private to this closure
 	 * @param {object} scope - the scope with which to call the callback
@@ -76,11 +74,11 @@
 				item.call(scope, data);
 			});
 		}, 0);
-	};
+	}
 
 	/**
 	 * sanitizeCbs ensures that the callbacks are returns in an array format
-	 * 		this is a helper function to keep it from being used all over the place below
+	 *         this is a helper function to keep it from being used all over the place below
 	 * @function
 	 * @private to this closure
 	 * @param {Array.<Function>|Function} cbs either an array of functions or a single function
@@ -88,10 +86,10 @@
 	**/
 	function sanitizeCbs(cbs) {
 		if(cbs && !isArray(cbs)) {
-			cbs = [cbs]
+			cbs = [cbs];
 		}
 		return cbs;
-	};
+	}
 
 	var internalFilteredDataInstance = {mine:"mine"};
 
@@ -115,7 +113,7 @@
 			} else {
 				newp[what](data);
 			}
-		}
+		};
 	}
 
 	function doIsPromiseSteal(data, scope) {
@@ -128,7 +126,7 @@
 		data.progress(function(progData) {
 			scope.doNotify(progData);
 		});
-	};
+	}
 
 	function doWhatYouShould(data, what, scope) {
 		switch(what) {
@@ -144,7 +142,7 @@
 				scope.doNotify(data);
 			break;
 		}
-	};
+	}
 
 	function doTryAndGetDatasThen(data, scope) {
 		var ret = {
@@ -161,7 +159,7 @@
 		}
 
 		return ret;
-	};
+	}
 
 	function doDatasThenIsAFunction(datasThen, data, scope) {
 		var fCalled = false;
@@ -195,7 +193,7 @@
 				scope.doReject(e);
 			}
 		}
-	};
+	}
 
 	function doStealDatasThen(data, what, scope) {
 		var ret = doTryAndGetDatasThen(data, scope);
@@ -251,9 +249,9 @@
 
 		/**
 		 * Represents a Promise Object.  If target is supplied and is an object
-		 * 		then we will turn that target object into the promise 
-		 * 		by extending it with the promise functions
-		 * 		instead of creating a new promise
+		 *         then we will turn that target object into the promise 
+		 *         by extending it with the promise functions
+		 *         instead of creating a new promise
 		 * @constructor
 		 * @param {p} p - the linked Deferred instance
 		 * @param {object} target - the target object
@@ -303,7 +301,7 @@
 		
 		/**
 		 * notifyWith will call any progress callbacks with the data provided 
-		 * 		using the scope provided
+		 *         using the scope provided
 		 * @function
 		 * @public on prototype
 		 * @param {object} scope - the scope to call the progress callbacks with
@@ -348,7 +346,7 @@
 		
 		/**
 		 * rejectWith will call any fail and always callbacks with the data provided 
-		 * 		using the scope provided
+		 *         using the scope provided
 		 * @function
 		 * @public on prototype
 		 * @param {object} scope - the scope to call the callbacks with
@@ -389,7 +387,7 @@
 		
 		/**
 		 * resolveWith will call any done and always callbacks with the data provided
-		 *  	using the scope provided
+		 *         using the scope provided
 		 * @function
 		 * @public on prototype
 		 * @param {object} scope - the scope to call the callbacks with
@@ -416,8 +414,8 @@
 
 		/**
 		 * always will set a callback for the resolve and reject events
-		 * 		or will immediately run the callback if the object is already
-		 *   	resolved or rejected.
+		 *         or will immediately run the callback if the object is already
+		 *         resolved or rejected.
 		 * @function
 		 * @public on prototype
 		 * @param {function || array[function]} cbs - a callback function or an array
@@ -442,8 +440,8 @@
 		
 		/**
 		 * done will set a callback for the resolve events
-		 * 		or will immediately run the callback if the object is already
-		 *   	resolved.
+		 *         or will immediately run the callback if the object is already
+		 *         resolved.
 		 * @function
 		 * @public on prototype
 		 * @param {Function|Array.<Function>} cbs a callback function or an array
@@ -468,8 +466,8 @@
 		
 		/**
 		 * fail will set a callback for the reject events
-		 * 		or will immediately run the callback if the object is already
-		 *   	rejected.
+		 *         or will immediately run the callback if the object is already
+		 *         rejected.
 		 * @function
 		 * @public on prototype
 		 * @param {Function|Array.<Function>} cbs - a callback function or an array
@@ -494,7 +492,7 @@
 		
 		/**
 		 * progress will set a callback for the notify events, or do nothing
-		 * 		if it is already resolved or rejected
+		 *         if it is already resolved or rejected
 		 * @function
 		 * @public on prototype
 		 * @param {function || array[function]} cbs - a callback function or an array
@@ -525,9 +523,9 @@
 
 		/**
 		 * then provides a function which allows chaining of promise callbacks essentially
-		 * 		it allows you to provide filter functions that will be called upon the original promise
-		 * 		which may modify/alter the data before returning/resolving/rejecting the newly
-		 * 		created deferred/promise.
+		 *         it allows you to provide filter functions that will be called upon the original promise
+		 *         which may modify/alter the data before returning/resolving/rejecting the newly
+		 *         created deferred/promise.
 		 * @function
 		 * @public on prototype
 		 * @param {function} doneFilter - a function to be run on the resolve event and whose return value
@@ -577,18 +575,18 @@
 
 		/**
 		 * When can take an array of promised or truthy/falsey objects
-		 * 		and can mesh them into a single promise/deferred which will
-		 * 		be resolved when all of the passed in promises resolve, or rejected if
-		 * 		any of the passed in promises is rejected.  It returns a promise in 
-		 * 		its own right which can represent the summation of all the inner
-		 * 		promises.
+		 *         and can mesh them into a single promise/deferred which will
+		 *         be resolved when all of the passed in promises resolve, or rejected if
+		 *         any of the passed in promises is rejected.  It returns a promise in 
+		 *         its own right which can represent the summation of all the inner
+		 *         promises.
 		 * @function
 		 * @public on prototype
 		 * @return {promise} promise instance object
 		**/
 		when: function() {
 			var args = Array.prototype.slice.call(arguments);
-			var promises = [true];
+			var promises = [];
 			var newp = new p();
 			var resolvedCount = 0;
 			var handledCount = 0;
@@ -601,6 +599,10 @@
 					promises.push(item);
 				}
 			});
+
+			if(promises.length === 0) {
+				newp.resolve(whenData);
+			}
 
 			promises.forEach(function(promise, i) {
 				if(isPromise(promise) || isDeferred(promise)) {
@@ -653,10 +655,10 @@
 		
 		/**
 		 * getter for the p's promise
-		 * 		The promise is the only thing which should be passed
-		 * 		to untrusted other functions, and is all that is needed
-		 * 		to setup callbacks on notify/resolve/reject events.
-		 * 		The promise cannot be used to "escalate" to the deferred
+		 *         The promise is the only thing which should be passed
+		 *         to untrusted other functions, and is all that is needed
+		 *         to setup callbacks on notify/resolve/reject events.
+		 *         The promise cannot be used to "escalate" to the deferred
 		 * @function
 		 * @public on prototype
 		 * @return {Promise} promise instance object
