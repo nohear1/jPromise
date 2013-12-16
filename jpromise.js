@@ -92,10 +92,10 @@
 	}
 
 	var internalFilteredDataInstance = {mine:"mine"};
-
+	var filteredData = internalFilteredDataInstance;
 	function getThenFilterCallback(filter, newp, what) {
 		return function(data) {
-			var filteredData = internalFilteredDataInstance;
+			filteredData = internalFilteredDataInstance;
 			if(filter && isFunction(filter)) {
 				try {
 					filteredData = filter.call(undefined, data);
@@ -237,6 +237,31 @@
 		return this;
 	};
 
+	var Promise = function(p, target) {
+		this.done = p.done.bind(p);
+		this.fail = p.fail.bind(p);
+		this.progress = p.progress.bind(p);
+		this.always = p.always.bind(p);
+		this.then = p.then.bind(p);
+		
+		this.state = function() {
+			return p.internalState;
+		};
+
+		//if target was passed in then return the ='promisified' target 
+		//intead of a new promise object
+		if(target && isObject(target)) {
+			extend(target, this);
+			return target;
+		}
+		return this;
+	}
+	extend(Promise.prototype,  {
+		toString: function() {
+			return "[object Promise]";
+		}
+	});
+
 	//extend the Deferred prototype with the functions that it needs.
 	//This is a performance/security trade-off in that these functions are
 	//kinda exposed (even though we freeze them below), but they are on
@@ -257,28 +282,7 @@
 		 * @param {object} target - the target object
 		 * @returns {promise} the promise instance object
 		**/
-		Promise: function(p, target) {
-			this.toString = function() {
-				return "[object Promise]";
-			};
-			this.done = p.done.bind(p);
-			this.fail = p.fail.bind(p);
-			this.progress = p.progress.bind(p);
-			this.always = p.always.bind(p);
-			this.then = p.then.bind(p);
-			
-			this.state = function() {
-				return p.internalState;
-			};
-
-			//if target was passed in then return the ='promisified' target 
-			//intead of a new promise object
-			if(target && isObject(target)) {
-				extend(target, this);
-				return target;
-			}
-			return this;
-		},
+		Promise: Promise,
 
 		/**
 		 * notify will call any progress callbacks with the data provided
@@ -508,16 +512,14 @@
 		},
 
 		deNestSanitizeTheInsanityAndCall: function(data, what) {
-			var that = this;
-
 			if(data === this.promise()) {
-				that.doReject(new TypeError("Promise Tried to Resolve with Self"));
+				this.doReject(new TypeError("Promise Tried to Resolve with Self"));
 			} else if(isPromise(data)) {
-				doIsPromiseSteal(data, that);
+				doIsPromiseSteal(data, this);
 			} else if(isObject(data) || isFunction(data)) {
-				doStealDatasThen(data, what, that);
+				doStealDatasThen(data, what, this);
 			} else {
-				doWhatYouShould(data, what, that);
+				doWhatYouShould(data, what, this);
 			}
 		},
 
@@ -678,13 +680,13 @@
 		}
 	});
 
-	if(Object.freeze) {
-		Object.freeze(p.prototype);
-	}
-
 	p.when = p.prototype.when;
 	p.wrap = p.prototype.wrap;
 
+	if(Object.freeze) {
+		Object.freeze(p.prototype);
+	}
+	
 	//and also return the Constructor so that it could be saved and used directly
 	return p;
 });
