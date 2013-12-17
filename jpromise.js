@@ -686,7 +686,7 @@
 	if(Object.freeze) {
 		Object.freeze(p.prototype);
 	}
-	
+
 	//and also return the Constructor so that it could be saved and used directly
 	return p;
 });
