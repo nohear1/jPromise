@@ -1,4 +1,4 @@
-var p = require('../../jpromise.js');
+var p = require('../../jpromise.min.js');
 var adapter = require("../adapter.js");
 
 module.exports = function () {
