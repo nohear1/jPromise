@@ -16,9 +16,16 @@
 		if(typeof define === 'function' && define.amd) {
 			define(factory);
 		} else if(typeof exports === 'object') {
-			module.exports = factory();
+			if(typeof module.exports._ === 'object') {
+				module.exports._.p = module.exports._.Dfd = factory();
+			} else {
+				module.exports = factory();
+			}
 		} else {
 			root.p = factory();
+			if(typeof root._ !== "undefined") {
+				root._.Dfd = root.p;
+			}
 		}
 	})(function() {
 
