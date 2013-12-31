@@ -16,8 +16,8 @@
 		if(typeof define === 'function' && define.amd) {
 			define(factory);
 		} else if(typeof exports === 'object') {
-			if(typeof module.exports._ === 'object') {
-				module.exports._.p = module.exports._.Dfd = factory();
+			if (Object.keys(module.exports) !== 0) {
+				module.exports.p = module.exports.Dfd = factory();
 			} else {
 				module.exports = factory();
 			}
