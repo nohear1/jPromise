@@ -30,6 +30,16 @@ describe("Promise.js Deferred Promise class", function() {
 			assert.equal(dfd.toString(), "[object Deferred]", "returned Object was not a Deferred");
 		});
 
+		it("should throw an error when you don't use new", function() {
+			var error = false;
+			try {
+				var dfd = p();
+			} catch(e) {
+				error = true;
+			}
+
+			assert.ok(error);
+		});
 	});
 
 	describe("the Deferred object is not safe to give around and as such exposes properties.  Worth it for performance IMO.", function() {

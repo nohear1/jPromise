@@ -224,7 +224,10 @@
 		 * @param {boolean} [debugMode] - Enables debug mode for exposing internal properties
 		 * @returns {deferred} the deferred instance object
 		**/
-		var p = function(beforeStart) {
+		var p = function p(beforeStart) {
+			if(this.constructor !== p) {
+				throw new Error("You must create deferreds with the 'new' keyword");
+			}
 			//setup some instance parameters
 			//internalState 0 == pending, 1 == resolved, 2 == rejected
 			this.internalState = 0;
