@@ -8,7 +8,7 @@ Tested in Chrome, Firefox, Safari, and IE8/9/10.
 
 This is a promise library that is speedy quick, doesn't hold onto scopes everywhere all willy-nilly, and is also quite flexible.
 
-* `_.Dfd` Constructor
+* `p` Constructor
 	* Creates a new deferred object
 * `dfd.promise()`
 	* Returns the promise for a given deferred object. The promise object is not able to access some of the deferrer's methods, such as resolve and reject.
@@ -29,8 +29,9 @@ This is a promise library that is speedy quick, doesn't hold onto scopes everywh
 ```
 //Stashes on the global _ on the property Dfd...
 //The closure also returns the Dfd constructor and could be munged to work in AMD/Common if we gave a...
+var p = require('jpromise');
 
-var dfd = new _.Dfd();
+var dfd = new p();
 
 var pro = dfd.promise();
 
